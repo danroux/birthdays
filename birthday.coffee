@@ -4,10 +4,10 @@ module.exports = (robot) ->
     birthday =
       user: msg.match[1]
       date: msg.match[2]
-    
+
     robot.brain.data.birthdays      ?= []
     robot.brain.data.birthday_users ?= []
-    
+
     if birthday.user in robot.brain.data.birthday_users
       msg.send "I already got #{birthday.user}'s birthday on my calendar."
     else
@@ -19,6 +19,11 @@ module.exports = (robot) ->
     birthday =
       user: msg.match[1]
       date: msg.match[2]
-      
-    robot.brain.data.birthdays      ?= []  
-    msg.send robot.brain.data.birthdays
+
+    robot.brain.data.birthdays      ?= []
+
+
+  robot.respond /birthdays$/i, (msg) ->
+    robot.brain.data.birthdays      ?= []
+    for bd in robot.brain.data.birthdays
+      msg.send "#{bd.user}: #{bd.date}"
