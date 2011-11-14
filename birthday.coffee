@@ -1,9 +1,16 @@
 module.exports = (robot) ->
 
   robot.respond /birthday (.*) (.*) add$/i, (msg) ->
+    dateArr = msg.match[2].split("/");
+    day = dateArr[0]
+    month = dateArr[1] - 1
+    year  = dateArr[2]
+
+    bdDate = new Date(year, month, day)
     birthday =
       user: msg.match[1]
-      date: msg.match[2]
+      date: bdDate
+      parsedDate: bdDate.toLocaleDateString();
 
     robot.brain.data.birthdays      ?= []
     robot.brain.data.birthday_users ?= []
@@ -13,7 +20,7 @@ module.exports = (robot) ->
     else
       robot.brain.data.birthdays.push birthday
       robot.brain.data.birthday_users.push birthday.user
-      msg.send "Got it. #{birthday.user}'s birthday is on #{birthday.date}"
+      msg.send "Got it. #{birthday.user}'s birthday is on #{birthday.parsedDate}"
 
   robot.respond /birthday (.*) (.*) change$/i, (msg) ->
     birthday =
@@ -26,4 +33,5 @@ module.exports = (robot) ->
   robot.respond /birthdays$/i, (msg) ->
     robot.brain.data.birthdays      ?= []
     for bd in robot.brain.data.birthdays
-      msg.send "#{bd.user}: #{bd.date}"
+      bd.date.setFullYear(new Date().getFullYear());
+      msg.send "#{bd.user}: #{bd.date.toLocaleDateString}"
