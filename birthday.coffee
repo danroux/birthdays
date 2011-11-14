@@ -34,4 +34,4 @@ module.exports = (robot) ->
     robot.brain.data.birthdays      ?= []
     for bd in robot.brain.data.birthdays
       bd.date.setFullYear(new Date().getFullYear());
-      msg.send "#{bd.user}: #{bd.date.toLocaleDateString}"
+      msg.send "#{bd.user}: #{bd.date.toLocaleDateString()}"
